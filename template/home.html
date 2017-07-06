@@ -1,0 +1,39 @@
+<!-- 
+下拉刷新：更新数据源，从服务器获取最新的数据并展示
+上拉加载：一般像新闻类似的数据，都会有很多条数据，如果一次全部获取，会比较耗时，用户体验较差，所以会采用分页获取的形式进行分段加载，也就是每次下拉倒最后一条数据时，会主动向服务器发送请求并告诉服务器需要获取第几页的数据
+ -->
+<ion-view title="首页">
+	<!-- 头部 -->
+	<ion-header-bar align-title="center" class="bar-positive">
+		<!-- 头部标题 -->
+		<h1 class="title title-center">首页</h1>
+	</ion-header-bar>
+	<!-- 主体内容 -->
+	<ion-content>
+		
+		<!-- 下拉刷新控件, pulling-text属性表示提示文字信息，on-refresh是刷新所触发的函数-->
+		<ion-refresher pulling-text="下拉刷新" on-refresh="doRefresh()"></ion-refresher>
+
+		<!-- 幻灯图（轮播图） -->
+		<ion-slide-box  auto-play="true">
+			<!-- 轮播数组 -->
+			<ion-slide ng-repeat="source in imgList"> 
+				<div class="box">
+					<!-- 注意此处需要用到表达式 -->
+					<img ng-src="{{source}}">
+				</div>
+			</ion-slide>
+		</ion-slide-box>
+		<!-- 使用列表 -->
+		<ion-list>
+			<!-- 列表的行控件 -->
+			<ion-item ng-repeat="person in dataList" ng-click="gotoDetail(person)">
+				<p>姓名：{{person.Name | smileFilter}}</p>
+				<p>城市：{{person.City}}</p>
+			</ion-item>
+		</ion-list>
+
+		<!-- 上拉加载 ng-if用于根据数是否加载完成，判断是否需要加载控件；on-infinite 上拉加载的触发事件，distance表示距离-->
+		<ion-infinite-scroll ng-if="haveMore" on-infinite = "loadMore()" distance="1%"></ion-infinite-scroll>
+	</ion-content>
+</ion-view>
